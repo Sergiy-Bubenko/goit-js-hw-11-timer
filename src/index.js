@@ -1,33 +1,44 @@
 import './sass/main.scss';
 
 
-new CountdownTimer({
+class CountdownTimer {
+  constructor(conf) {
+    this.refs = {
+      days: document.querySelector('span[data-value="days"]'),
+      hours: document.querySelector('span[data-value="hours"]'),
+      mins: document.querySelector('span[data-value="mins"]'),
+      secs: document.querySelector('span[data-value="secs"]'),
+    }
+    
+    this.startDate = conf.targetDate;
+    this.timeId = null;
+    this.timeLeft = null;  
+  }
+
+  calc = () => {
+    let currentDate = Date.now();
+    this.timeLeft = this.startDate - currentDate;
+    
+    if (this.timeLeft <= 0) return;
+
+    this.refs.days.textContent = this.pad(Math.floor(this.timeLeft / (1000 * 60 * 60 * 24)));
+    this.refs.hours.textContent = this.pad(Math.floor((this.timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+    this.refs.mins.textContent = this.pad(Math.floor((this.timeLeft % (1000 * 60 * 60)) / (1000 * 60)));
+    this.refs.secs.textContent = this.pad(Math.floor((this.timeLeft % (1000 * 60)) / 1000));
+  }
+
+  pad = (value) => {
+    return String(value).padStart(2, '0');
+  }
+  
+  timeStart = () => {
+    this.timeId = setInterval(this.calc, 1000);
+  }
+};
+
+
+const timer1 = new CountdownTimer({
   selector: '#timer-1',
-  targetDate: new Date('Jul 17, 2019'),
+  targetDate: new Date('11 17, 2021'),
 });
-
-
-/*
- * Оставшиеся дни: делим значение UTC на 1000 * 60 * 60 * 24, количество
- * миллисекунд в одном дне (миллисекунды * секунды * минуты * часы)
- */
-const days = Math.floor(time / (1000 * 60 * 60 * 24));
-
-/*
- * Оставшиеся часы: получаем остаток от предыдущего расчета с помощью оператора
- * остатка % и делим его на количество миллисекунд в одном часе
- * (1000 * 60 * 60 = миллисекунды * минуты * секунды)
- */
-const hours = Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-
-/*
- * Оставшиеся минуты: получаем оставшиеся минуты и делим их на количество
- * миллисекунд в одной минуте (1000 * 60 = миллисекунды * секунды)
- */
-const mins = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
-
-/*
- * Оставшиеся секунды: получаем оставшиеся секунды и делим их на количество
- * миллисекунд в одной секунде (1000)
- */
-const secs = Math.floor((time % (1000 * 60)) / 1000);
+timer1.timeStart();

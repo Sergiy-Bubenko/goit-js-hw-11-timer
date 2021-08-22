@@ -14,4 +14,20 @@ body {
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   transition: color 150ms var(--timing-function),
     background-color 150ms var(--timing-function);
+  color: #fff;
+}
+
+.timer {
+  max-width: 380px;
+  padding: 40px;
+  text-align: center;
+  background: tomato;
+  display: flex;
+  justify-content: space-between;
+}
+
+.value {
+  display: block;
+  padding-bottom: 10px;
+  font-size: 40px;
 }
